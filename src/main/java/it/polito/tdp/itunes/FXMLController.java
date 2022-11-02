@@ -60,7 +60,10 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-    	
+    	txtResult.clear();
+    	Integer prezzo= Integer.parseInt(txtN.getText());
+    	this.model.creaGrafo(prezzo);
+    	txtResult.appendText("Vertici: "+this.model.nVertici()+"\nArchi: "+this.model.nArchi());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

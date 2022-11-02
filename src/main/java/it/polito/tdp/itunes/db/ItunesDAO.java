@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import it.polito.tdp.itunes.model.Album;
 import it.polito.tdp.itunes.model.Artist;
 import it.polito.tdp.itunes.model.Genre;
@@ -139,5 +141,32 @@ public class ItunesDAO {
 		return result;
 	}
 	
+	public List<Album> getAlbumByPrice(Integer prezzo){
+		final String sql = "SELECT a.Title as title, a.AlbumId as id "
+				+ "FROM album a, (SELECT distinct a.AlbumId  "
+				+ "FROM track t, album a "
+				+ "WHERE t.AlbumId= a.AlbumId "
+				+ "GROUP BY a.AlbumId ASC "
+				+ "HAVING SUM(t.UnitPrice)<?) AS tabella "
+				+ "WHERE tabella.AlbumId= a.AlbumId";
+		List<Album> result = new LinkedList<>();
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, prezzo);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				Album a=new Album(res.getInt("id"), res.getString("title"));
+				result.add(a);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		return result;
+		}
 	
 }
