@@ -13,7 +13,7 @@ public class Model {
 	
 	ItunesDAO dao;
 	Graph<Album, DefaultWeightedEdge> grafo;
-	Map<Album,Integer> mapalbum;
+//	Map<Album,Integer> mapalbum;
 	List<Album> vertici;
 	
 	public void creaGrafo(Integer prezzo) {
